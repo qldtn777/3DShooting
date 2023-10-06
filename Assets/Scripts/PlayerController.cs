@@ -13,11 +13,14 @@ public class PlayerController : MonoBehaviour
     [SerializeField] float clampXPos = 3;
     [SerializeField] float clampYMinPos = 3f;
     [SerializeField] float clampYMaxPos = 0;
-    [SerializeField] float roll;
-    [SerializeField] float pitch;
-    [SerializeField] float yaw;
+     float roll;
+     float pitch;
+     float yaw;
      float h;
      float v;
+
+    [SerializeField] GameObject[] lasers;
+    
     private void OnEnable()
     {
         movement.Enable();
@@ -33,6 +36,29 @@ public class PlayerController : MonoBehaviour
         MovePlayer();
 
         RotatePlayer();
+
+        FireLaser();
+    }
+
+    private void FireLaser()
+    {
+        if (Input.GetButton("Fire1"))
+        {
+            SetLaserActive(true);
+        }
+        else
+        {
+            SetLaserActive(false);
+        }
+    }
+
+    private void SetLaserActive(bool isActive)
+    {
+        foreach(var laser in lasers)
+        {
+            var particle = laser.GetComponent<ParticleSystem>().emission;
+            particle.enabled = isActive;
+        }
     }
 
     private void RotatePlayer()
